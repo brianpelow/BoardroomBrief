@@ -43,8 +43,8 @@ def synthesize_brief(
 
 def _ai_narrative(brief: WeeklyBrief, config: BriefConfig) -> str:
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=config.anthropic_api_key)
+        from openai import OpenAI
+        client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=config.openrouter_api_key)
 
         prompt = f"""You are a VP of Engineering writing a weekly briefing for executive leadership at a {config.industry} company.
 
@@ -79,12 +79,12 @@ Write a 4-paragraph executive engineering brief:
 Write for a CFO/CTO/Board audience. Be specific, data-driven, and appropriately candid.
 Include compliance context relevant to {config.industry}. No filler."""
 
-        message = client.messages.create(
+        message = client.chat.completions.create(
             model=config.model,
             max_tokens=700,
             messages=[{"role": "user", "content": prompt}],
         )
-        return message.content[0].text
+        return message.choices[0].message.content
     except Exception:
         return _template_narrative(brief)
 

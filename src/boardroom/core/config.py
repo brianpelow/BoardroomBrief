@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 class BriefConfig(BaseModel):
     """Runtime configuration for BoardroomBrief."""
 
-    anthropic_api_key: str = Field("", description="Anthropic API key")
+    openrouter_api_key: str = Field("", description="OpenRouter API key")
     github_token: str = Field("", description="GitHub API token")
     jira_url: str = Field("", description="JIRA instance URL")
     jira_token: str = Field("", description="JIRA API token")
@@ -22,7 +22,7 @@ class BriefConfig(BaseModel):
     @classmethod
     def from_env(cls) -> "BriefConfig":
         return cls(
-            anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+            openrouter_api_key=os.environ.get("OPENROUTER_API_KEY", ""),
             github_token=os.environ.get("GITHUB_TOKEN", ""),
             jira_url=os.environ.get("JIRA_URL", ""),
             jira_token=os.environ.get("JIRA_TOKEN", ""),
@@ -32,7 +32,7 @@ class BriefConfig(BaseModel):
 
     @property
     def has_api_key(self) -> bool:
-        return bool(self.anthropic_api_key)
+        return bool(self.openrouter_api_key)
 
     @property
     def has_github(self) -> bool:
